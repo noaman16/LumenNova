@@ -1,0 +1,12 @@
+rules:
+  - regex: "password"
+    description: "Password detection rule"
+
+  - regex: "api_key|api_token"
+    description: "API key/token detection rule"
+
+  - regex: "access_key_id|secret_access_key"
+    description: "AWS key detection rule"
+
+  - regex: "(?i)apikey"
+    description: "Case-insensitive API key detection rule"

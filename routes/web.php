@@ -1,14 +1,15 @@
 <?php
 use App\Http\Controllers\TaskController;
+use Illuminate\Support\Facades\Route;
 
 use Laravel\Lumen\Routing\Router;
 
 /** @var Router $router */
 
 // Remove the existing route
-// $router->get('/', function () use ($router) {
-//     return $router->app->version();
-// });
+$router->get('/', function () use ($router) {
+    return $router->app->version();
+});
 
 // Add the new welcome route
 $router->get('/', function () {
