@@ -67,7 +67,7 @@ export default {
     },
     async createTask() {
       try {
-        const response = await this.$axios.post('http://nova.local.com/tasks/api', this.newTask);
+        const response = await this.$axios.post('/tasks', this.newTask);
         this.tasks.push(response.data);
         this.newTask = {}; // Clear the form
       } catch (error) {

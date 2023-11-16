@@ -6,7 +6,7 @@ const prodEnv = require('./prod.env')
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   // ROOT_API: '"http://vvg.vuetemplate.com/api/v1"',
-  ROOT_API: '"http://nova.local.com/tasks"', 
+  ROOT_API: '"http://nova.local.com"', 
   // HR_URL: '"http://vvg.hrportal.com/forgotpassword"',
   // NOT_REGISTERED_HR_URL: '"http://hrportal.local.com/register"',
   // VERSION:'"v1"',
