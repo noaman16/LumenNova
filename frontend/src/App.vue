@@ -1,15 +1,19 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <item-component></item-component>
   </div>
 </template>
 
 <script>
+import ItemComponent from './components/ItemComponent.vue';
+
 export default {
-  name: 'App'
-}
+  components: {
+    ItemComponent,
+  },
+};
 </script>
+
 
 <style>
 #app {
