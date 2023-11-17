@@ -24,5 +24,12 @@ $router->post('/tasks', 'TaskController@store');
 $router->put('/tasks/{id}', 'TaskController@update');
 $router->delete('/tasks/{id}', 'TaskController@destroy');
 
+$router->options('/{any:.*}', function () {
+    return response('OK', 200)
+        ->header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE')
+        ->header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin, Authorization');
+});
+
+
 
 
