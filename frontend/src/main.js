@@ -5,7 +5,7 @@ import axios from 'axios';
 Vue.config.productionTip = false;
 
 // Set the base URL for Axios
-axios.defaults.baseURL = 'http://nova.local.com';
+axios.defaults.baseURL = 'http://nova.local.com:80';
 
 Vue.prototype.$axios = axios;
 
