@@ -46,8 +46,8 @@ export default {
   },
   methods: {
     async fetchTasks() {
-      try {
-        const response = await this.$axios.get('http://nova.local.com/tasks');
+      try {        
+        const response = await this.$axios.get('/tasks');
         this.tasks = response.data;
       } catch (error) {
         console.error('Error fetching tasks:', error);
@@ -55,7 +55,7 @@ export default {
     },
     async viewTask(id) {
       try {
-        const response = await this.$axios.get(`http://nova.local.com/tasks/${id}`);
+        const response = await this.$axios.get(`/tasks/${id}`);
         this.selectedTask = response.data;
       } catch (error) {
         console.error('Error fetching task details:', error);
@@ -67,7 +67,7 @@ export default {
     },
     async deleteTask(id) {
       try {
-        await this.$axios.delete(`http://nova.local.com/tasks/${id}`);
+        await this.$axios.delete(`/tasks/${id}`);
         this.fetchTasks();
         this.clearSelectedTask();
       } catch (error) {
@@ -85,9 +85,9 @@ export default {
     async submitForm() {
       try {
         if (this.formMode === 'create') {
-          await this.$axios.post('http://nova.local.com/tasks', this.form);
+          await this.$axios.post('/tasks', this.form);
         } else if (this.formMode === 'update' && this.selectedTask) {
-          await this.$axios.put(`http://nova.local.com/tasks/${this.selectedTask.id}`, this.form);
+          await this.$axios.put(`/tasks/${this.selectedTask.id}`, this.form);
         }
 
         this.fetchTasks();
