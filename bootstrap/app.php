@@ -18,6 +18,9 @@ date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 | application as an "IoC" container and router for this framework.
 |
 */
+header('Access-Control-Allow-Origin:  *');
+header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE');
+header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Origin, Authorization');
 
 $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
