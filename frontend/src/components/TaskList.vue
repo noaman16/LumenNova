@@ -62,7 +62,10 @@ export default {
       }
     },
     editTask(id) {
+      // Set formMode to 'update' before fetching task details
       this.formMode = 'update';
+
+      // Fetch task details
       this.viewTask(id);
     },
     async deleteTask(id) {
