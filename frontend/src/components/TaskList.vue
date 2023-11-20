@@ -61,7 +61,7 @@ export default {
       },
       formMode: 'create', // 'create' or 'update'
       currentPage: 1,
-      tasksPerPage: 10
+      tasksPerPage: 5
     };
   },
   computed: {
