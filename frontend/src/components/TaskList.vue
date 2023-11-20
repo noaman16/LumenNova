@@ -5,11 +5,20 @@
       <p>Manage your tasks efficiently with LumenNova!</p>
     </div>
 
-    <h2>Task List</h2>
-    
+    <!-- Form for creating a new task -->
+    <form @submit.prevent="submitForm" class="task-form">
+      <h2>Create New Task</h2>
+      <label for="title">Title:</label>
+      <input type="text" v-model="form.title" required class="input-field" />
+      <label for="description">Description:</label>
+      <textarea v-model="form.description" required class="textarea-field"></textarea>
+      <button type="submit" class="submit-btn">Create Task</button>
+    </form>
+
     <!-- Display the task list -->
-    <ul v-if="tasks.length > 0" class="task-list-ul">
-      <li v-for="task in tasks" :key="task.id" class="task-item">
+    <h2>Task List</h2>
+    <ul v-if="paginatedTasks.length > 0" class="task-list-ul">
+      <li v-for="task in paginatedTasks" :key="task.id" class="task-item">
         <div class="task-details">
           <span class="task-title">{{ task.title }}</span>
           <div class="task-buttons">
@@ -22,19 +31,19 @@
     </ul>
     <p v-else class="no-tasks">No tasks available</p>
 
-    <!-- Display the selected task or form for creating/updating tasks -->
+    <!-- Pagination -->
+    <div class="pagination">
+      <button v-for="pageNumber in totalPages" :key="pageNumber" @click="changePage(pageNumber)">
+        {{ pageNumber }}
+      </button>
+    </div>
+
+    <!-- Display the selected task -->
     <div v-if="selectedTask" class="selected-task">
       <h3>{{ selectedTask.title }}</h3>
       <p>{{ selectedTask.description }}</p>
       <button @click="clearSelectedTask" class="btn-back">Back to Task List</button>
     </div>
-    <form v-else @submit.prevent="submitForm" class="task-form">
-      <label for="title">Title:</label>
-      <input type="text" v-model="form.title" required class="input-field" />
-      <label for="description">Description:</label>
-      <textarea v-model="form.description" required class="textarea-field"></textarea>
-      <button type="submit" class="submit-btn">{{ formMode === 'create' ? 'Create Task' : 'Update Task' }}</button>
-    </form>
   </div>
 </template>
 
@@ -48,8 +57,20 @@ export default {
         title: '',
         description: ''
       },
-      formMode: 'create' // 'create' or 'update'
+      formMode: 'create', // 'create' or 'update'
+      currentPage: 1,
+      tasksPerPage: 10
     };
+  },
+  computed: {
+    paginatedTasks() {
+      const start = (this.currentPage - 1) * this.tasksPerPage;
+      const end = start + this.tasksPerPage;
+      return this.tasks.slice(start, end);
+    },
+    totalPages() {
+      return Math.ceil(this.tasks.length / this.tasksPerPage);
+    }
   },
   mounted() {
     this.fetchTasks();
@@ -108,6 +129,9 @@ export default {
       } catch (error) {
         console.error('Error submitting form:', error);
       }
+    },
+    changePage(pageNumber) {
+      this.currentPage = pageNumber;
     }
   }
 };
@@ -132,6 +156,10 @@ export default {
 
 .app-header p {
   color: #6c757d;
+}
+
+.task-form {
+  margin-bottom: 20px;
 }
 
 .task-list-ul {
@@ -165,11 +193,16 @@ export default {
   font-style: italic;
 }
 
-.selected-task {
-  margin-top: 20px;
+.pagination {
+  margin-top: 10px;
 }
 
-.task-form {
+.pagination button {
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.selected-task {
   margin-top: 20px;
 }
 
