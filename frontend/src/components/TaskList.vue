@@ -7,12 +7,14 @@
 
     <!-- Form for creating a new task -->
     <form @submit.prevent="submitForm" class="task-form">
-      <h2>Create New Task</h2>
+      <h2>{{ formMode === 'create' ? 'Create New Task' : 'Edit Task' }}</h2>
       <label for="title">Title:</label>
       <input type="text" v-model="form.title" required class="input-field" />
       <label for="description">Description:</label>
       <textarea v-model="form.description" required class="textarea-field"></textarea>
-      <button type="submit" class="submit-btn">Create Task</button>
+      <button type="submit" class="submit-btn">
+        {{ formMode === 'create' ? 'Create Task' : 'Update Task' }}
+      </button>
     </form>
 
     <!-- Display the task list -->
@@ -98,6 +100,12 @@ export default {
 
       // Fetch task details
       this.viewTask(id);
+
+      // Set form data with the selected task details
+      this.form = {
+        title: this.selectedTask.title,
+        description: this.selectedTask.description,
+      };
     },
     async deleteTask(id) {
       try {
