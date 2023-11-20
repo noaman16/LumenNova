@@ -1,8 +1,8 @@
 <template>
   <div class="task-list">
     <div class="app-header">
-      <h1>LumenNova APP</h1>
-      <p>Manage your tasks efficiently with LumenNova!</p>
+      <h1 style="color: #4A412A;">LumenNova APP</h1>
+      <p style="color: #28a745;">Manage your tasks efficiently with <span style="font-weight: bold;">LumenNova</span>!</p>
     </div>
 
     <!-- Form for creating a new task -->
