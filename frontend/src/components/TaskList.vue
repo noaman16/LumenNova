@@ -1,29 +1,39 @@
 <template>
-  <div>
+  <div class="task-list">
+    <div class="app-header">
+      <h1>LumenNova APP</h1>
+      <p>Manage your tasks efficiently with LumenNova!</p>
+    </div>
+
     <h2>Task List</h2>
     
     <!-- Display the task list -->
-    <ul v-if="tasks.length > 0">
-      <li v-for="task in tasks" :key="task.id">
-        {{ task.title }} - <button @click="viewTask(task.id)">View</button>
-        <button @click="editTask(task.id)">Edit</button>
-        <button @click="deleteTask(task.id)">Delete</button>
+    <ul v-if="tasks.length > 0" class="task-list-ul">
+      <li v-for="task in tasks" :key="task.id" class="task-item">
+        <div class="task-details">
+          <span class="task-title">{{ task.title }}</span>
+          <div class="task-buttons">
+            <button @click="viewTask(task.id)" class="btn-view">View</button>
+            <button @click="editTask(task.id)" class="btn-edit">Edit</button>
+            <button @click="deleteTask(task.id)" class="btn-delete">Delete</button>
+          </div>
+        </div>
       </li>
     </ul>
-    <p v-else>No tasks available</p>
+    <p v-else class="no-tasks">No tasks available</p>
 
     <!-- Display the selected task or form for creating/updating tasks -->
-    <div v-if="selectedTask">
+    <div v-if="selectedTask" class="selected-task">
       <h3>{{ selectedTask.title }}</h3>
       <p>{{ selectedTask.description }}</p>
-      <button @click="clearSelectedTask">Back to Task List</button>
+      <button @click="clearSelectedTask" class="btn-back">Back to Task List</button>
     </div>
-    <form v-else @submit.prevent="submitForm">
+    <form v-else @submit.prevent="submitForm" class="task-form">
       <label for="title">Title:</label>
-      <input type="text" v-model="form.title" required />
+      <input type="text" v-model="form.title" required class="input-field" />
       <label for="description">Description:</label>
-      <textarea v-model="form.description" required></textarea>
-      <button type="submit">{{ formMode === 'create' ? 'Create Task' : 'Update Task' }}</button>
+      <textarea v-model="form.description" required class="textarea-field"></textarea>
+      <button type="submit" class="submit-btn">{{ formMode === 'create' ? 'Create Task' : 'Update Task' }}</button>
     </form>
   </div>
 </template>
@@ -104,25 +114,97 @@ export default {
 </script>
 
 <style scoped>
-h2, h3 {
-  color: #35424a;
+.task-list {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-ul {
+.app-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.app-header h1 {
+  font-size: 2em;
+  margin-bottom: 5px;
+}
+
+.app-header p {
+  color: #6c757d;
+}
+
+.task-list-ul {
   list-style-type: none;
   padding: 0;
 }
 
-li {
+.task-item {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
   margin-bottom: 10px;
+  padding: 10px;
 }
 
-form {
+.task-details {
+  display: flex;
+  justify-content: space-between;
+}
+
+.task-title {
+  font-weight: bold;
+}
+
+.task-buttons button {
+  margin-left: 5px;
+}
+
+.no-tasks {
+  color: #868e96;
+  font-style: italic;
+}
+
+.selected-task {
   margin-top: 20px;
 }
 
-label {
-  display: block;
-  margin-bottom: 5px;
+.task-form {
+  margin-top: 20px;
+}
+
+.input-field,
+.textarea-field {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.submit-btn {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-back {
+  background-color: #6c757d;
+}
+
+.btn-view {
+  background-color: #17a2b8;
+}
+
+.btn-edit {
+  background-color: #ffc107;
+}
+
+.btn-delete {
+  background-color: #dc3545;
 }
 </style>
