@@ -1,5 +1,5 @@
 <template>
-  <div class="task-list">
+  <div class="task-list" style="background-color: #f3f3f3;">
     <div class="app-header">
       <h1 style="color: #4A412A;">LumenNova APP</h1>
       <p style="color: #28a745;">Manage your tasks efficiently with <span style="font-weight: bold;">LumenNova</span>!</p>
