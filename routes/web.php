@@ -16,6 +16,9 @@ $router->get('/', function () {
     return 'Welcome to Nova!';
 });
 
+// Login page
+$router->post('/login', 'AuthController@login');
+$router->post('/register', 'AuthController@register');
 
 
 $router->get('/tasks', 'TaskController@index');
@@ -23,6 +26,7 @@ $router->get('/tasks/{id}', 'TaskController@show');
 $router->post('/tasks', 'TaskController@store');
 $router->put('/tasks/{id}', 'TaskController@update');
 $router->delete('/tasks/{id}', 'TaskController@destroy');
+
 
 $router->options('/{any:.*}', function () {
     return response('OK', 200)
