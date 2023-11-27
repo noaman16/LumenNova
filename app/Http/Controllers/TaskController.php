@@ -81,4 +81,17 @@ class TaskController extends Controller
     
         return response()->json(['message' => 'Task deleted']);
     }
+
+    public function dataTable()
+    {
+        $tasks = Task::all();
+        return response()->json(['data' => $tasks]);
+    }
+
+    public function dataTablePage()
+    {
+        return view('tasks_table');
+    }
+
+
 }

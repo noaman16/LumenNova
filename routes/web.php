@@ -23,6 +23,13 @@ $router->get('/tasks/{id}', 'TaskController@show');
 $router->post('/tasks', 'TaskController@store');
 $router->put('/tasks/{id}', 'TaskController@update');
 $router->delete('/tasks/{id}', 'TaskController@destroy');
+$router->get('/tasks_table', 'TaskController@dataTable');
+$router->get('/tasks_table_view', 'TaskController@dataTablePage');
+
+// $router->get('/tasks_table_view', function () {
+//     return view('tasks_table');
+// });
+
 
 $router->options('/{any:.*}', function () {
     return response('OK', 200)
