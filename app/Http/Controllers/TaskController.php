@@ -7,17 +7,13 @@ use App\Models\Task;
 
 class TaskController extends Controller
 {
-    // public function index()
-    // {
-    //     $tasks = Task::all();
-    //     return response()->json($tasks);
-    // }
-
     public function index()
     {
-        return view('list');
+        $tasks = Task::all();
+        return response()->json($tasks);
     }
 
+    
     public function show($id)
     {
         $task = Task::find($id);
@@ -85,5 +81,44 @@ class TaskController extends Controller
         $task->delete();
     
         return response()->json(['message' => 'Task deleted']);
+    }
+  //
+    // Implement Datatable
+    public function dataTable()
+    {
+        return view('list');
+    }
+
+    public function getData(Request $request)
+    {
+        $draw = $request->input('draw');
+        $start = $request->input('start');
+        $rowPerPage = $request->input('length');
+        
+        $orderArray = $request->input('order');
+        $columnNameArray = $request->input('columns');
+                     
+        $searchArray = $request->input('search');
+        $columnIndex = $orderArray[0]['column'];
+        $columnName = $columnNameArray[$columnIndex]['data'];
+        $columnSortOrder = $orderArray[0]['dir'];
+        $searchValue = $searchArray['value'];
+
+        $tasks_data = \DB::table('tasks');
+        $total = $tasks_data->count();
+
+        $totalFilter = $total;
+
+        $arrData = \DB::table('tasks');
+        $arrData = $arrData->get();
+
+        $response = [
+            "draw" => intval($draw),
+            "recordsTotal" => $total,
+            "recordsFiltered" => $totalFilter,
+            "data" => $arrData,
+        ];
+
+        return response()->json($response);
     }
 }

@@ -13,17 +13,24 @@ use Laravel\Lumen\Routing\Router;
 
 // Add the new welcome route
 $router->get('/', function () {
-    return 'Welcome to Nova!';
+    return view('welcome');
+});
+$router-> get('/data', function() {
+    return 'Hello';
 });
 
 
 
 $router->get('/tasks', 'TaskController@index');
-$router->get('/tasks', 'TaskController@list');
 $router->get('/tasks/{id}', 'TaskController@show');
 $router->post('/tasks', 'TaskController@store');
 $router->put('/tasks/{id}', 'TaskController@update');
 $router->delete('/tasks/{id}', 'TaskController@destroy');
+
+//LumenNova DataTable
+$router->get('/tasks_datatable', 'TaskController@dataTable');
+
+$router->get('/tasks_data', 'TaskController@getData');
 
 $router->options('/{any:.*}', function () {
     return response('OK', 200)
