@@ -7,10 +7,15 @@ use App\Models\Task;
 
 class TaskController extends Controller
 {
+    // public function index()
+    // {
+    //     $tasks = Task::all();
+    //     return response()->json($tasks);
+    // }
+
     public function index()
     {
-        $tasks = Task::all();
-        return response()->json($tasks);
+        return view('list');
     }
 
     public function show($id)

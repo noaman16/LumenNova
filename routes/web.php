@@ -19,6 +19,7 @@ $router->get('/', function () {
 
 
 $router->get('/tasks', 'TaskController@index');
+$router->get('/tasks', 'TaskController@list');
 $router->get('/tasks/{id}', 'TaskController@show');
 $router->post('/tasks', 'TaskController@store');
 $router->put('/tasks/{id}', 'TaskController@update');
