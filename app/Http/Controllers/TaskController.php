@@ -82,8 +82,8 @@ class TaskController extends Controller
     
         return response()->json(['message' => 'Task deleted']);
     }
-  //
-    // Implement Datatable
+  // Impliment Datatable 
+
     public function dataTable()
     {
         return view('list');
@@ -91,34 +91,41 @@ class TaskController extends Controller
 
     public function getData(Request $request)
     {
-        $draw = $request->input('draw');
-        $start = $request->input('start');
-        $rowPerPage = $request->input('length');
-        
-        $orderArray = $request->input('order');
-        $columnNameArray = $request->input('columns');
+        $draw 				= 		$request->get('draw'); // Internal use
+        $start 				= 		$request->get("start"); // where to start next records for pagination
+        $rowPerPage 		= 		$request->get("length"); // How many recods needed per page for pagination
+
+        $orderArray 	   = 		$request->get('order');
+        $columnNameArray 	= 		$request->get('columns'); // It will give us columns array
                      
-        $searchArray = $request->input('search');
-        $columnIndex = $orderArray[0]['column'];
-        $columnName = $columnNameArray[$columnIndex]['data'];
-        $columnSortOrder = $orderArray[0]['dir'];
-        $searchValue = $searchArray['value'];
+        $searchArray 		= 		$request->get('search');
+        $columnIndex 		= 		$orderArray[0]['column'];  // This will let us know,
+                                                      // which column index should be sorted 
+                                                      // 0 = id, 1 = name, 2 = email , 3 = created_at
+
+        $columnName 		= 		$columnNameArray[$columnIndex]['data']; // Here we will get column name, 
+                                                                  // Base on the index we get
+
+        $columnSortOrder 	= 		$orderArray[0]['dir']; // This will get us order direction(ASC/DESC)
+        $searchValue 		= 		$searchArray['value']; // This is search value 
 
         $tasks_data = \DB::table('tasks');
+        //$tasks_data = \DB::connection('nova')->table('tasks');
         $total = $tasks_data->count();
 
         $totalFilter = $total;
 
         $arrData = \DB::table('tasks');
+       //$arrData = \DB::connection('nova')->table('tasks');
         $arrData = $arrData->get();
 
-        $response = [
-            "draw" => intval($draw),
-            "recordsTotal" => $total,
-            "recordsFiltered" => $totalFilter,
-            "data" => $arrData,
-        ];
+        $response = array(
+        "draw" => intval($draw),
+        "recordsTotal" => $total,
+        "recordsFiltered" => $totalFilter,
+        "data" => $arrData,
+         );
 
-        return response()->json($response);
+         return response()->json($response);
     }
 }

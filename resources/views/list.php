@@ -33,12 +33,14 @@
 
 </body>
 <script>
+    //var appUrl = "{{ APP_URL }}";
     $(document).ready(function(){
       $('#datatable').DataTable({
          processing: true,
          serverSide: true,
          order: [[ 0, "desc" ]],
          ajax: "{{ url('tasks_data') }}",
+         //ajax: appUrl + '/tasks_datatable',
          columns: [
                { data: 'id' },
                { data: 'title' },
