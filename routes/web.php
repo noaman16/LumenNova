@@ -26,6 +26,8 @@ $router->delete('/tasks/{id}', 'TaskController@destroy');
 $router->get('/tasks_table', 'TaskController@dataTable');
 $router->get('/tasks_table_view', 'TaskController@dataTablePage');
 
+
+
 // $router->get('/tasks_table_view', function () {
 //     return view('tasks_table');
 // });
