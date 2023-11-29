@@ -9,22 +9,27 @@
     <!-- Include Bootstrap CSS and DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 
 <div class="container mt-5">
-    <table id="myTable" class="table table-bordered">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Description</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- The data will be dynamically populated here -->
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-lg-12">
+            <table id="myTable" class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- The data will be dynamically populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <!-- Include jQuery, Bootstrap JS, DataTables JS, and DataTables Buttons JS -->
@@ -38,6 +43,7 @@
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.flash.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
     $(document).ready(function () {
