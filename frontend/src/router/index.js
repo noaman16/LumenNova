@@ -1,21 +1,26 @@
+// router/index.js
 import Vue from 'vue';
-import Router from 'vue-router';
-// import HelloWorld from '@/components/HelloWorld';
+import VueRouter from 'vue-router';
 import TaskList from '@/components/TaskList';
+import DataTable from '@/components/DataTable';
 
-Vue.use(Router);
+Vue.use(VueRouter);
 
-export default new Router({
-  routes: [
-    // {
-    //   path: '/',
-    //   name: 'Home',
-    //   component: HelloWorld
-    // },
-    {
-      path: '/',
-      name: 'Tasklist',
-      component: TaskList
-    }
-  ]
+const routes = [
+  {
+    path: '/',
+    name: 'TaskList',
+    component: TaskList,
+  },
+  {
+    path: '/datatable',
+    name: 'DataTable',
+    component: DataTable,
+  },
+];
+
+const router = new VueRouter({
+  routes,
 });
+
+export default router;
