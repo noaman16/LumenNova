@@ -13,7 +13,7 @@ use Laravel\Lumen\Routing\Router;
 
 // Add the new welcome route
 $router->get('/', function () {
-    return 'Welcome to Nova!';
+    return view('welcome');
 });
 
 

@@ -90,9 +90,10 @@
             <p>To get started, you can explore the following:</p>
             <ul>
                 <li><a href="/tasks">View Tasks</a></li>
+                <li><a href="/tasks_table_view">View DataTable</a></li>
                 <!-- <li><a href="/tasks/create">Create a New Task</a></li> -->
             </ul>
-        </section>
+        </section> 
     </main>
     <!-- <footer>
         <p>&copy; {{ date('Y') }} Nova</p>
