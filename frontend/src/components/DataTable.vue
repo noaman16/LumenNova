@@ -16,6 +16,19 @@
 <script>
 import axios from "axios";
 import $ from "jquery";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "datatables.net-bs4";
+import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
+import "jszip";
+import "pdfmake";
+import "datatables.net-buttons-bs4";
+import "datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css";
+import "datatables.net-buttons/js/buttons.colVis";
+import "datatables.net-buttons/js/buttons.flash";
+import "datatables.net-buttons/js/buttons.html5";
+import "datatables.net-buttons/js/buttons.print";
+
+
 
 export default {
   mounted() {
@@ -23,8 +36,8 @@ export default {
   },
   methods: {
     getUsers() {
-      axios
-        .get("http://nova.local.com/tasks")
+      this.$axios
+        .get("/tasks")
         .then((response) => {
           $("#myTable").DataTable({
             dom: "Bfrtip",
@@ -44,5 +57,12 @@ export default {
 </script>
 
 <style scoped>
+.desktop-size {
+  width: 100%; /* Set the width to 100% of the container */
+  max-width: 1200px; /* Set a maximum width if needed */
+  margin: 0 auto; /* Center the component horizontally */
+}
+
 /* Add any component-specific styles here */
 </style>
+

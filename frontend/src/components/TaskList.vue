@@ -3,7 +3,7 @@
     <div class="app-header">
       <h1 style="color: #4A412A;">LumenNova APP</h1>
       <p style="color: #28a745;">Manage your tasks efficiently with <span style="font-weight: bold;">LumenNova</span>!</p>
-      <a href="http://nova.local.com/tasks_table_view" target="_blank"><button@click>See DataTable</button></a>
+      <router-link to="/datatable"><button @click style="background-color: lightblue;">DataTable</button></router-link>    
     </div>
 
     <!-- Form for creating a new task -->
