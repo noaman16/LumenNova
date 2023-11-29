@@ -1,15 +1,17 @@
 <template>
   <div id="app">
-    <TaskList />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import TaskList from '@/components/TaskList';
+import DataTable from '@/components/DataTable';
 
 export default {
   components: {
-    TaskList
+    TaskList,
+    DataTable
   }
 };
 </script>
