@@ -23,34 +23,45 @@
 </template>
 
 <script>
+import 'datatables.net-bs4/css/dataTables.bootstrap4.css';
+import 'datatables.net-bs4';
+
 export default {
   data() {
     return {
       dataTableRows: [],
+      dataTableInstance: null,
     };
   },
   mounted() {
     this.fetchDataTable();
   },
+  watch: {
+    dataTableRows: {
+      handler() {
+        this.initializeDataTable();
+      },
+      deep: true,
+    },
+  },
   methods: {
     async fetchDataTable() {
       try {
-        const response = await this.$axios.get('/tasks_table_view');
-        this.dataTableRows = response.data.data; // Adjust the property as per your server response
-        this.initializeDataTable();
+        const response = await this.$axios.get('/tasks_table');
+        this.dataTableRows = response.data.data;
       } catch (error) {
         console.error('Error fetching DataTable:', error);
       }
     },
     initializeDataTable() {
       // Destroy any existing DataTable
-      if ($.fn.DataTable.isDataTable('#taskDataTable')) {
-        $('#taskDataTable').DataTable().destroy();
+      if (this.dataTableInstance) {
+        this.dataTableInstance.destroy();
       }
 
       // Initialize DataTable
-      $(document).ready(() => {
-        $('#taskDataTable').DataTable({
+      this.$nextTick(() => {
+        this.dataTableInstance = $(this.$el).find('#taskDataTable').DataTable({
           data: this.dataTableRows,
           columns: [
             { data: 'id', title: 'ID' },

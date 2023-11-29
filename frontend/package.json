@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.18.1",
     "datatables.net": "^1.13.8",
+    "datatables.net-bs4": "^1.13.8",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
