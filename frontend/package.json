@@ -19,6 +19,7 @@
     "jszip": "^3.10.1",
     "pdfmake": "^0.2.8",
     "vue": "^2.5.2",
+    "vue-datatables-net": "^2.0.1",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
