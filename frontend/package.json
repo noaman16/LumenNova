@@ -14,11 +14,14 @@
     "bootstrap": "^5.3.2",
     "datatables.net": "^1.13.8",
     "datatables.net-bs4": "^1.13.8",
+<<<<<<< HEAD
     "datatables.net-buttons-bs4": "^2.4.2",
     "datatables.net-responsive-bs4": "^2.5.0",
     "jquery": "^3.7.1",
     "jszip": "^3.10.1",
     "pdfmake": "^0.2.8",
+=======
+>>>>>>> master_ii
     "vue": "^2.5.2",
     "vue-datatables-net": "^2.0.1",
     "vue-router": "^3.0.1"

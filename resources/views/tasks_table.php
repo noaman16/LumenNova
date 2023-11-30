@@ -28,6 +28,14 @@
                     <!-- Add more columns if needed -->
                 </tr>
             </thead>
+            <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <!-- Add more columns if needed -->
+                </tr>
+            </tfoot>
         </table>
     </div>
 
@@ -37,18 +45,31 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     <script>
-        $(document).ready(function() {
-            $('#tasks-table').DataTable({
-                ajax: '/tasks_table',
-                columns: [
-                    { data: 'id' },
-                    { data: 'title' },
-                    { data: 'description' },
-                    // Add more columns if needed
-                ]
-            });
+    $(document).ready(function() {
+        var table = $('#tasks-table').DataTable({
+            ajax: '/tasks_table',
+            columns: [
+                { data: 'id' },
+                { data: 'title' },
+                { data: 'description' },
+                // Add more columns if needed
+            ],
+            initComplete: function () {
+                this.api().columns().every(function () {
+                    var column = this;
+                    var input = document.createElement("input");
+                    $(input)
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function () {
+                            column.search($(this).val(), false, false, true).draw();
+                        })
+                        .attr('placeholder', column.header().textContent);
+                });
+            }
         });
-    </script>
+    });
+</script>
+
 
 </body>
 </html>
