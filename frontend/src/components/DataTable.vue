@@ -1,81 +1,68 @@
 <template>
-  <div class="datatable">
-    <h2>Datatable</h2>
-    <table id="taskDataTable" class="display">
+  <div>
+    <table id="myTable" class="table table-bordered mt-5">
       <thead>
         <tr>
           <th>ID</th>
           <th>Title</th>
           <th>Description</th>
-          <!-- Add more columns as needed -->
         </tr>
       </thead>
-      <tbody>
-        <tr v-for="row in dataTableRows" :key="row.id">
-          <td>{{ row.id }}</td>
-          <td>{{ row.title }}</td>
-          <td>{{ row.description }}</td>
-          <!-- Add more columns as needed -->
-        </tr>
-      </tbody>
+      <tbody></tbody>
     </table>
   </div>
 </template>
 
 <script>
-import 'datatables.net-bs4/css/dataTables.bootstrap4.css';
-import 'datatables.net-bs4';
+import axios from "axios";
+import $ from "jquery";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "datatables.net-bs4";
+import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
+import "jszip";
+import "pdfmake";
+import "datatables.net-buttons-bs4";
+import "datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css";
+import "datatables.net-buttons/js/buttons.colVis";
+import "datatables.net-buttons/js/buttons.flash";
+import "datatables.net-buttons/js/buttons.html5";
+import "datatables.net-buttons/js/buttons.print";
+
+
 
 export default {
-  data() {
-    return {
-      dataTableRows: [],
-      dataTableInstance: null,
-    };
-  },
   mounted() {
-    this.fetchDataTable();
-  },
-  watch: {
-    dataTableRows: {
-      handler() {
-        this.initializeDataTable();
-      },
-      deep: true,
-    },
+    this.getUsers();
   },
   methods: {
-    async fetchDataTable() {
-      try {
-        const response = await this.$axios.get('/tasks_table');
-        this.dataTableRows = response.data.data;
-      } catch (error) {
-        console.error('Error fetching DataTable:', error);
-      }
-    },
-    initializeDataTable() {
-      // Destroy any existing DataTable
-      if (this.dataTableInstance) {
-        this.dataTableInstance.destroy();
-      }
-
-      // Initialize DataTable
-      this.$nextTick(() => {
-        this.dataTableInstance = $(this.$el).find('#taskDataTable').DataTable({
-          data: this.dataTableRows,
-          columns: [
-            { data: 'id', title: 'ID' },
-            { data: 'title', title: 'Title' },
-            { data: 'description', title: 'Description' },
-            // Add more columns as needed
-          ],
-        });
-      });
+    getUsers() {
+      this.$axios
+        .get("/tasks")
+        .then((response) => {
+          $("#myTable").DataTable({
+            dom: "Bfrtip",
+            buttons: ["colvis", "excel", "print", "csv"],
+            data: response.data,
+            columns: [
+              { data: "id" },
+              { data: "title" },
+              { data: "description" },
+            ],
+          });
+        })
+        .catch((error) => console.log(error.response));
     },
   },
 };
 </script>
 
 <style scoped>
-/* Add any additional styles for your DataTable if needed */
+.desktop-size {
+  width: 100%; /* Set the width to 100% of the container */
+  max-width: 1200px; /* Set a maximum width if needed */
+  margin: 0 auto; /* Center the component horizontally */
+}
+
+/* Add any component-specific styles here */
 </style>
+
