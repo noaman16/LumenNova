@@ -25,6 +25,9 @@ header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Origin, Autho
 $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
+$app->register(Yajra\DataTables\DataTablesServiceProvider::class);
+class_alias(Yajra\DataTables\Facades\DataTables::class, 'Datatables');
+
 
  $app->withFacades();
 // class_alias('Illuminate\Support\Facades\Route', 'Route');
@@ -109,6 +112,12 @@ $app->register(App\Providers\EventServiceProvider::class);
 | can respond to, as well as the controllers that may handle them.
 |
 */
+
+$app->register(Yajra\DataTables\DataTablesServiceProvider::class);
+
+$app->configure('datatables');
+class_alias(Yajra\DataTables\Facades\DataTables::class, 'Datatables');
+
 
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
