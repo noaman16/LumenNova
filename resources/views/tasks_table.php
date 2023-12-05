@@ -44,7 +44,7 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-    <script>
+    <!-- <script>
     $(document).ready(function() {
         var table = $('#tasks-table').DataTable({
             ajax: '/tasks_table',
@@ -68,7 +68,36 @@
             }
         });
     });
+</script> -->
+<!-- Update the DataTables initialization script in resources/views/tasks_table.php -->
+<script>
+$(document).ready(function() {
+    var table = $('#tasks-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: '/tasks_table',
+        columns: [
+            { data: 'id', name: 'id' },
+            { data: 'title', name: 'title' },
+            { data: 'description', name: 'description' },
+            // Add more columns if needed
+        ],
+        initComplete: function () {
+            this.api().columns().every(function () {
+                var column = this;
+                var input = document.createElement("input");
+                $(input)
+                    .appendTo($(column.footer()).empty())
+                    .on('change', function () {
+                        column.search($(this).val(), false, false, true).draw();
+                    })
+                    .attr('placeholder', column.header().textContent);
+            });
+        }
+    });
+});
 </script>
+
 
 
 </body>
