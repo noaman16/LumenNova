@@ -1,26 +1,40 @@
-# Lumen PHP Framework
+# DataTables Server-Side Processing
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
+This branch introduces server-side processing for DataTables in the TaskController of the Lumen application. The changes enhance the efficiency of data retrieval, search, sort, and pagination by offloading these operations to the server.
 
+## Changes Made
 
+- Updated the `dataTable` method in the TaskController to handle server-side processing.
+- Modified the DataTable initialization script in `resources/views/tasks_table.php` to enable server-side configuration.
 
-main_noaman branch is copy of master_ii. Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+## Usage
 
-## Official Documentation
+1. **TaskController Changes:**
+   - The `dataTable` method in `TaskController` now processes DataTables requests on the server side, allowing for efficient data retrieval.
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+2. **View Changes:**
+   - The DataTable initialization script in `resources/views/tasks_table.php` has been updated to indicate server-side processing:
+     ```javascript
+     $(document).ready(function() {
+         var table = $('#tasks-table').DataTable({
+             serverSide: true,
+             // Other configurations...
+         });
+     });
+     ```
 
-## Contributing
+## How to Verify
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+To verify that DataTables is using server-side processing:
 
-## Security Vulnerabilities
+1. Open your browser's Developer Tools (`Ctrl + Shift + I` or `Cmd + Opt + I`).
+2. Navigate to the DataTable on the specified page (e.g., `http://example.local.com/tasks_table_view`).
+3. Open the "Console" tab in Developer Tools.
+4. Check for AJAX requests to the server (e.g., `/tasks_table`) when loading or interacting with the DataTable.
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+## Notes
 
-## License
+- Ensure that your TaskController routes are correctly configured in `routes/web.php`.
+- Adjust the DataTables initialization script if additional customization is required.
 
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Feel free to reach out if you encounter any issues or have further questions.
