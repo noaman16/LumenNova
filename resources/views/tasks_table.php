@@ -47,7 +47,12 @@
     <script>
     $(document).ready(function() {
         var table = $('#tasks-table').DataTable({
-            ajax: '/tasks_table',
+            serverSide: true,
+            processing: true,
+            ajax: {
+                url: '/tasks_table',
+                type: 'GET',
+            },
             columns: [
                 { data: 'id' },
                 { data: 'title' },
@@ -69,6 +74,7 @@
         });
     });
 </script>
+
 
 
 </body>

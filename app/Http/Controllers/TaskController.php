@@ -82,11 +82,51 @@ class TaskController extends Controller
         return response()->json(['message' => 'Task deleted']);
     }
 
-    public function dataTable()
+    public function dataTable(Request $request)
     {
-        $tasks = Task::all();
-        return response()->json(['data' => $tasks]);
+        $columns = [
+            'id',
+            'title',
+            'description',
+            // Add more columns if needed
+        ];
+    
+        $query = Task::query();
+    
+        // Apply search
+        if ($request->filled('search.value')) {
+            $searchValue = $request->input('search.value');
+            $query->where(function ($query) use ($columns, $searchValue) {
+                foreach ($columns as $column) {
+                    $query->orWhere($column, 'like', '%' . $searchValue . '%');
+                }
+            });
+        }
+    
+        // Get the total count before applying pagination
+        $total = $query->count();
+    
+        // Apply ordering
+        if ($request->filled('order.0.column') && $request->filled('order.0.dir')) {
+            $orderColumn = $columns[$request->input('order.0.column')];
+            $orderDirection = $request->input('order.0.dir');
+            $query->orderBy($orderColumn, $orderDirection);
+        }
+    
+        // Apply pagination
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+        $query->skip($start)->take($length);
+    
+        $data = $query->get();
+    
+        return response()->json([
+            'data' => $data,
+            'recordsTotal' => $total,
+            'recordsFiltered' => $total,
+        ]);
     }
+    
 
     public function dataTablePage()
     {
