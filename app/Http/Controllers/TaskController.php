@@ -93,14 +93,12 @@ class TaskController extends Controller
     
         $query = Task::query();
     
-        // Apply search
-        if ($request->filled('search.value')) {
-            $searchValue = $request->input('search.value');
-            $query->where(function ($query) use ($columns, $searchValue) {
-                foreach ($columns as $column) {
-                    $query->orWhere($column, 'like', '%' . $searchValue . '%');
-                }
-            });
+        // Individual column search
+        foreach ($columns as $key => $column) {
+            if ($request->filled("columns.$key.search.value")) {
+                $searchValue = $request->input("columns.$key.search.value");
+                $query->where($column, 'like', '%' . $searchValue . '%');
+            }
         }
     
         // Get the total count before applying pagination
@@ -126,6 +124,7 @@ class TaskController extends Controller
             'recordsFiltered' => $total,
         ]);
     }
+    
     
 
     public function dataTablePage()
