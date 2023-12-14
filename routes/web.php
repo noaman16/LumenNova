@@ -16,7 +16,11 @@ $router->get('/', function () {
     return view('welcome');
 });
 
+// routes/api.php
 
+$router->group(['prefix' => 'api'], function ($router) {
+    $router->post('/login', 'AuthController@login');
+});
 
 $router->get('/tasks', 'TaskController@index');
 $router->get('/tasks/{id}', 'TaskController@show');
