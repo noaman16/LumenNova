@@ -1,31 +1,66 @@
-name: Semgrep SAST Scan
+name: SAST – Semgrep
 
 on:
   pull_request:
+    branches: ["**"]
+  push:
     branches:
-      - "**"
+      - main
+      - master
+  schedule:
+    # Full scan every Monday at 07:00 UTC to catch newly published rules
+    - cron: "0 7 * * 1"
+
+permissions:
+  contents: read
+  security-events: write   # required to upload SARIF to GitHub Security tab
+  pull-requests: read
 
 jobs:
   semgrep:
-    name: Run Semgrep Scan
+    name: Semgrep SAST Scan
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      security-events: write
+    container:
+      image: semgrep/semgrep:latest   # always uses the latest stable Semgrep CLI
 
     steps:
-      - name: Checkout repository
+      # ── 1. Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Run Semgrep
-        uses: returntocorp/semgrep-action@v1
         with:
-          config: auto
+          # Full history lets Semgrep diff only changed files on PRs
+          fetch-depth: 0
 
-      # Optional: Upload SARIF results to GitHub Security tab
+      # ── 2. Run Semgrep ────────────────────────────────────────────────────────
+      - name: Run Semgrep scan
+        env:
+          # Optional: set SEMGREP_APP_TOKEN if you use Semgrep Cloud Platform
+          # for dashboard results, PR comments, and policy enforcement.
+          # Store it as a repo/org secret named SEMGREP_APP_TOKEN.
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+        run: |
+          semgrep ci \
+            --sarif \
+            --output semgrep.sarif \
+            --config "p/default" \
+            --config "p/owasp-top-ten" \
+            --config "p/secrets" \
+            --config "p/supply-chain" \
+            --error          # exit 1 on findings → fails the PR check
+
+      # ── 3. Upload SARIF to GitHub Security tab ───────────────────────────────
       - name: Upload SARIF results
-        if: always()
+        if: always()   # upload even when the scan step fails
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: semgrep.sarif
+          category: semgrep
+
+      # ── 4. (Optional) Upload raw SARIF as an artifact ────────────────────────
+      - name: Archive SARIF artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: semgrep-sarif-${{ github.run_id }}
+          path: semgrep.sarif
+          retention-days: 30
