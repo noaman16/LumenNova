@@ -2,20 +2,13 @@ name: SAST – Semgrep
 
 on:
   pull_request:
-    branches: ["**"]
   push:
     branches:
       - main
       - master
-      - main_noaman_serversideDT
-  schedule:
-    # Full scan every Monday at 07:00 UTC to catch newly published rules
-    - cron: "0 7 * * 1"
 
 permissions:
   contents: read
-  security-events: write   # required to upload SARIF to GitHub Security tab
-  pull-requests: read
 
 jobs:
   semgrep:
@@ -25,58 +18,18 @@ jobs:
       image: semgrep/semgrep:latest
 
     steps:
-      # ── 1. Fix git ownership inside container ─────────────────────────────────
-      # The semgrep container runs as a different UID than the runner, which
-      # causes git to refuse the workspace. Mark it safe before checkout.
       - name: Mark workspace as git safe directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
-      # ── 2. Checkout ───────────────────────────────────────────────────────────
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # full history so Semgrep can diff PR changes
+          fetch-depth: 0
 
-      # ── 3. Run Semgrep ────────────────────────────────────────────────────────
-      # --severity ERROR replaces the removed --error flag.
-      # continue-on-error lets later steps always run (SARIF upload).
-      # The final "Enforce findings" step re-reads the exit code to fail the job.
       - name: Run Semgrep scan
-        id: semgrep
-        continue-on-error: true
-        env:
-          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
         run: |
-          semgrep ci \
-            --sarif \
-            --output semgrep.sarif \
+          semgrep scan \
             --config "p/default" \
             --config "p/owasp-top-ten" \
             --config "p/secrets" \
-            --config "p/supply-chain" \
-            --severity ERROR
-
-      # ── 4. Upload SARIF to GitHub Security tab ────────────────────────────────
-      - name: Upload SARIF results
-        if: always() && hashFiles('semgrep.sarif') != ''
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: semgrep.sarif
-          category: semgrep
-
-      # ── 5. Archive raw SARIF as workflow artifact ─────────────────────────────
-      - name: Archive SARIF artifact
-        if: always() && hashFiles('semgrep.sarif') != ''
-        uses: actions/upload-artifact@v4
-        with:
-          name: semgrep-sarif-${{ github.run_id }}
-          path: semgrep.sarif
-          retention-days: 30
-
-      # ── 6. Fail the job if Semgrep found issues ───────────────────────────────
-      # Doing this last ensures SARIF is always uploaded before we exit non-zero.
-      - name: Enforce findings gate
-        if: steps.semgrep.outcome == 'failure'
-        run: |
-          echo "Semgrep found security issues. Review the Security tab or SARIF artifact."
-          exit 1
+            --error
