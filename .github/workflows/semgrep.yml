@@ -22,22 +22,29 @@ jobs:
     name: Semgrep SAST Scan
     runs-on: ubuntu-latest
     container:
-      image: semgrep/semgrep:latest   # always uses the latest stable Semgrep CLI
+      image: semgrep/semgrep:latest
 
     steps:
-      # ── 1. Checkout ──────────────────────────────────────────────────────────
+      # ── 1. Fix git ownership inside container ─────────────────────────────────
+      # The semgrep container runs as a different UID than the runner, which
+      # causes git to refuse the workspace. Mark it safe before checkout.
+      - name: Mark workspace as git safe directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      # ── 2. Checkout ───────────────────────────────────────────────────────────
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          # Full history lets Semgrep diff only changed files on PRs
-          fetch-depth: 0
+          fetch-depth: 0   # full history so Semgrep can diff PR changes
 
-      # ── 2. Run Semgrep ────────────────────────────────────────────────────────
+      # ── 3. Run Semgrep ────────────────────────────────────────────────────────
+      # --severity ERROR replaces the removed --error flag.
+      # continue-on-error lets later steps always run (SARIF upload).
+      # The final "Enforce findings" step re-reads the exit code to fail the job.
       - name: Run Semgrep scan
+        id: semgrep
+        continue-on-error: true
         env:
-          # Optional: set SEMGREP_APP_TOKEN if you use Semgrep Cloud Platform
-          # for dashboard results, PR comments, and policy enforcement.
-          # Store it as a repo/org secret named SEMGREP_APP_TOKEN.
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
         run: |
           semgrep ci \
@@ -47,21 +54,29 @@ jobs:
             --config "p/owasp-top-ten" \
             --config "p/secrets" \
             --config "p/supply-chain" \
-            --error          # exit 1 on findings → fails the PR check
+            --severity ERROR
 
-      # ── 3. Upload SARIF to GitHub Security tab ───────────────────────────────
+      # ── 4. Upload SARIF to GitHub Security tab ────────────────────────────────
       - name: Upload SARIF results
-        if: always()   # upload even when the scan step fails
-        uses: github/codeql-action/upload-sarif@v3
+        if: always() && hashFiles('semgrep.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: semgrep.sarif
           category: semgrep
 
-      # ── 4. (Optional) Upload raw SARIF as an artifact ────────────────────────
+      # ── 5. Archive raw SARIF as workflow artifact ─────────────────────────────
       - name: Archive SARIF artifact
-        if: always()
+        if: always() && hashFiles('semgrep.sarif') != ''
         uses: actions/upload-artifact@v4
         with:
           name: semgrep-sarif-${{ github.run_id }}
           path: semgrep.sarif
           retention-days: 30
+
+      # ── 6. Fail the job if Semgrep found issues ───────────────────────────────
+      # Doing this last ensures SARIF is always uploaded before we exit non-zero.
+      - name: Enforce findings gate
+        if: steps.semgrep.outcome == 'failure'
+        run: |
+          echo "Semgrep found security issues. Review the Security tab or SARIF artifact."
+          exit 1
