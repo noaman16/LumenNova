@@ -7,6 +7,7 @@ on:
     branches:
       - main
       - master
+      - main_noaman_serversideDT
   schedule:
     # Full scan every Monday at 07:00 UTC to catch newly published rules
     - cron: "0 7 * * 1"
